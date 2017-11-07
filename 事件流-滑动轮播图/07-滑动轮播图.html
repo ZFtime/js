@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        img {
+            vertical-align: middle;/*【去掉图片上下三像素缝隙】*/
+        }
+        .outer {
+            width: 490px;
+            height: 170px;
+            padding: 5px;
+            margin: 100px auto;
+            border: 1px solid #ccc;
+        }
+        .inner {
+            width: 490px;
+            height: 170px;
+            overflow: hidden;
+            position: relative;
+        }
+        ul {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 510%;
+        }
+        ul li {
+            float: left;
+        }
+        ol {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
+        ol li {
+            float: left;
+            width: 16px;
+            height: 16px;
+            text-align: center;
+            line-height: 16px;
+            border: 1px solid #ccc;
+            margin: 0 5px;
+            cursor: pointer;
+            background-color: #fff;
+        }
+        .current {
+            color: #fff;
+            background-color: orange;
+        }
+    </style>
+    <script>
+        window.onload=function () {
+            /*获取相关元素*/
+             var outer=document.getElementById('outer');
+             var inner=outer.firstElementChild;
+             var imgWindth=inner.offsetWidth;
+             var ul=document.getElementsByTagName('ul')[0];
+             var ol=inner.lastElementChild;
+             var olliArr=ol.children;
+            //for循环绑定事件：//思路: 1.点亮盒子;   2.移动ul;
+            /*点亮盒子，获取索引值,移动索引值，点亮盒子*/
+            for(var i=0;i<olliArr.length;i++){
+                olliArr[i].index=i;//    自定义索引值olliArr[2].index=2
+             //  console.log(i);
+                /*绑定事件*/
+                olliArr[i].onmouseover=function () {
+                    /*使用原来的盒子,实现点亮原来的盒子*/
+                   // var newli='';  不需要建立一个新的盒子
+                    for(var j=0;j<olliArr.length;j++){
+                        /*点亮盒子，移动ul,*/
+                        //点亮盒子，使用排他思想
+                        olliArr[j].className='';
+                    }
+                    //olliArr[j].className='current';
+                    this.className='current';
+
+
+                    //移动ul
+                    var sss=this.index*imgWindth;
+                    fn(ul,-sss);
+                }
+            }
+
+
+
+
+            function fn(ele,target) {
+                clearInterval(ele.timer)//清除定时器
+                /*封装：1.让谁ele移动;   2.移动到哪里target;   3.定时器(1个)...;*/
+                /*设置定时器*/
+                ele.timer=setInterval(function () {
+                    var step=target>ele.offsetLeft?10:-10;
+                    /*赋值*/
+                    ele.style.left=ele.offsetLeft+step+'px';
+                    if(Math.abs(target-ele.offsetLeft)<Math.abs(step)){
+                        ele.style.left=target+'px';
+                        clearInterval(ele.timer);
+                    }
+                    /*   if(ele.offsetLeft===target){
+                     clearInterval(ele.timer);//让盒子停止运动
+                     }*/
+                },10)
+            }
+
+
+        }
+    </script>
+</head>
+<body>
+
+<div class="outer" id="outer">
+    <div class="inner">
+        <ul>
+            <li><img src="images/01.jpg"/></li>
+            <li><img src="images/02.jpg"/></li>
+            <li><img src="images/03.jpg"/></li>
+            <li><img src="images/04.jpg"/></li>
+            <li><img src="images/05.jpg"/></li>
+        </ul>
+        <ol>
+            <li class="current">1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+        </ol>
+    </div>
+</div>
+
+
+</body>
+</html>
